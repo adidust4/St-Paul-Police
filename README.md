@@ -57,16 +57,16 @@ In the creation of this multiple linear regression model, I decided to include r
 
 | **Model Coefficient** | **Estimate** | **95% Confidence Interval**** (LB, UB) **|** P-Value** |
 | --- | --- | --- | --- |
-| **Intercept** | 0.05 | (0.03, 0.06) | \&lt; 0.0001 |
-| **raceBlack** | 0.07 | (0.06, 0.09) | \&lt; 0.0001 |
-| **raceHispanic** | 0.06 | (0.03, 0.08) | \&lt; 0.0001 |
-| **raceOther** | 0.10 | (0.06, 0.14) | \&lt; 0.0001 |
-| **raceWhite** | 0.04 | (0.02, 0.05) | \&lt; 0.0001 |
-| **sexMale** | 0.19 | (0.17, 0.20) | \&lt; 0.0001 |
-| **raceBlack\*sexMale** | 0.18 | (0.17, 0.20) | \&lt; 0.0001 |
-| **raceHispanic\*sexMale** | 0.11 | (0.09, 0.13) | \&lt; 0.0001 |
+| **Intercept** | 0.05 | (0.03, 0.06) | <= 0.0001 |
+| **raceBlack** | 0.07 | (0.06, 0.09) | <= 0.0001 |
+| **raceHispanic** | 0.06 | (0.03, 0.08) | <= 0.0001 |
+| **raceOther** | 0.10 | (0.06, 0.14) | <= 0.0001 |
+| **raceWhite** | 0.04 | (0.02, 0.05) | <= 0.0001 |
+| **sexMale** | 0.19 | (0.17, 0.20) | <= 0.0001 |
+| **raceBlack\*sexMale** | 0.18 | (0.17, 0.20) | <= 0.0001 |
+| **raceHispanic\*sexMale** | 0.11 | (0.09, 0.13) | <= 0.0001 |
 | **raceOther\*sexMale** | -0.09 | (-0.13, -0.04) | 0.0003 |
-| **raceWhite\*sexMale** | -0.04 | (-0.06, -0.02) | \&lt; 0.0001 |
+| **raceWhite\*sexMale** | -0.04 | (-0.06, -0.02) | <= 0.0001 |
 
 ## Model Interpretation
 
@@ -101,9 +101,9 @@ To answer the question of how searches might correlate with the dealing of citat
 
 | **Model Coefficient** | **Estimate** (exponentiated) | **95% Confidence Interval** (exponentiated) | **P-Value** |
 | --- | --- | --- | --- |
-| **Intercept** | 0.15 | [0.149, 0.151] | \&lt; 0.0001 |
-| **friskPreformed** | 1.46 | [1.407, 1.524] | \&lt; 0.0001 |
-| **searchConducted** | 1.41 | [1.348, 1.473] | \&lt; 0.0001 |
+| **Intercept** | 0.15 | [0.149, 0.151] | <= 0.0001 |
+| **friskPreformed** | 1.46 | [1.407, 1.524] | <= 0.0001 |
+| **searchConducted** | 1.41 | [1.348, 1.473] | <= 0.0001 |
 
 ## Model Interpretation
 
