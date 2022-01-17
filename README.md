@@ -46,8 +46,8 @@ The other transformation I performed was turning the citation variable from a bo
 
 ## Exploratory Data Analysis
 
-The above visualizations describe the proportion of the different number of searches performed (0, 1, 2, or 3) based on the subject&#39;s sex and race. In the chart on the left, Black subjects made up a majority of those searched 1, 2, and 3 times. About 46% of those searched once, 42% of those searched twice, and 50% of those searched three times were Black. White subjects were the majority of those who weren&#39;t searched, as 40% of those not searched were White. In the chart on the right, men were stopped more than women overall. Over half of those searched 0 and 2 times were men, 85% of those searched once were men, and 89% of those searched 3 times were men. These charts clearly show that subjects stopped in St. Paul were primarily men, White, or Black, and that men or Black subjects were also the most highly searched. ![](RackMultipart20220117-4-kwvg3o_html_5c2327427caf1999.png)
- ![](RackMultipart20220117-4-kwvg3o_html_263324cb8ac6bb6b.png)
+The above visualizations describe the proportion of the different number of searches performed (0, 1, 2, or 3) based on the subject&#39;s sex and race. In the chart on the left, Black subjects made up a majority of those searched 1, 2, and 3 times. About 46% of those searched once, 42% of those searched twice, and 50% of those searched three times were Black. White subjects were the majority of those who weren&#39;t searched, as 40% of those not searched were White. In the chart on the right, men were stopped more than women overall. Over half of those searched 0 and 2 times were men, 85% of those searched once were men, and 89% of those searched 3 times were men. These charts clearly show that subjects stopped in St. Paul were primarily men, White, or Black, and that men or Black subjects were also the most highly searched. 
+![pic1_stat155](https://user-images.githubusercontent.com/56092297/149683916-ef5dd3ce-76e4-4b03-b0fb-968ed578efcf.PNG)
 
 ## Model Creation
 
@@ -74,7 +74,9 @@ This linear model compares the number of searches done (out of 3 possible search
 
 On average, Asian males who were stopped were searched a greater amount than their female counterparts of the same race. The coefficient for men is 0.19, meaning that on average, Asian men were searched 0.19 more times than Asian women. The male and Black male coefficients have the same confidence interval, indicating that we are 95% confident that Asian men on average are searched between 0.17 and 0.20 times more than Asian women. This is such that we would expect 95% of samples from the total population to generate 95% confidence intervals including the true coefficient. Similarly, we are 95% confident that stopped drivers of Black race in comparison to stopped drivers of Asian race are on average searched between 0.17 and 0.20 times more among male drivers in comparison to female drivers. As neither of these ranges include 0, we can conclude that the coefficients indicate a positive relationship between black drivers compared to asian drivers who are male compared to female. Both variables also have p-values less than 0.0001, indicating the small likelihood of having this range of coefficients should the null hypothesis of Asian women being searched more than &quot;other&quot; women to be true. On the other end of the spectrum, those with race labeled &quot;other&quot; were searched on average 0.09 times less than their Asian counterparts if they were male, rather than female.
 
-## Model Evaluation ![](RackMultipart20220117-4-kwvg3o_html_c43fbe60ccc3ab68.png) ![](RackMultipart20220117-4-kwvg3o_html_f7fa162ca4fe155c.png)
+## Model Evaluation 
+![pic2-stat155](https://user-images.githubusercontent.com/56092297/149683939-80143074-07b3-474b-9954-f8869f26fe30.PNG)
+
 
 Generally, the plot of residuals stays around zero, although there is a trend of overestimation (inherent to the fact that the maximum number of stops is 3 and the values are discrete). The model tends to overestimate the number of searches performed on all groups of people in the dataset. Our model overestimates more often the number of searches performed on Black and Hispanic people who were stopped than other races. The spread of residual values are all fairly evenly spaced throughout the residual plots, other than the boxes for Black and Hispanic subjects, who had a larger 50% quartile range. The model also overestimates for male subjects more than female subjects, as well as having a larger spread of residuals for male subjects Each plot has approximately the same amount of outliers. The R2 value is fairly low, with around 3.6% of variance in number of searches being explained by the model. Residual standard error is a bit high, with most of the predicted values being within 1.58 searches (2 times the Residual Standard Error) of the actual amount of searches that were conducted. This is high since the range of numbers of searches is between 0 and 3, meaning that the RSE is about half of this range.
 
@@ -84,9 +86,7 @@ Although R2 and Residual Standard Error are not the strongest measures of fit fo
 ## Is a subject more likely to be cited based on the searches conducted on them?
 
 ## Exploratory Data Analysis
-
-![](RackMultipart20220117-4-kwvg3o_html_dd4408145445c0b4.png)
- ![](RackMultipart20220117-4-kwvg3o_html_9744e4c343fd8eb3.png)
+![pic3-stat155](https://user-images.githubusercontent.com/56092297/149683949-6728fa52-374c-482d-baaa-9717611c0cd6.PNG)
 
 ##
 
@@ -112,8 +112,9 @@ This logistic regression model suggests a relationship between invasive searches
 Similarly, stopped drivers with searches conducted were more likely to be cited than those who didn&#39;t, holding whether they were frisked constant. Those who were searched out of the stopped drivers had odds of being cited that increased by a factor of 1.41 compared to those who were not searched. Once again, this value has a statistically significant p-value less than 0.0001, indicating that there is a less than 0.01% chance for us to have collected this data should the null hypothesis, that a stopped driver being searched does not result in a change in the odds of being cited, be true. We are 95% confident that stopped drivers that are searched have odds of getting a citation increased by a factor of between 1.35 and 1.47 times compared to those stopped drivers who were not searched holding frisking constant.
 
 ## Model Evaluation
+![pic4-stat155](https://user-images.githubusercontent.com/56092297/149683953-3ad7dcde-d164-4fa4-8318-b7e4131e85a0.PNG)
 
-![](RackMultipart20220117-4-kwvg3o_html_2e40f57d1dc11429.png)
+
 
 In order to evaluate this model, a threshold of 0.131 is used, indicating that the model will predict a citation if the probability of receiving one predicted is 13.1% or more. If the threshold is lower, the model never predicts a citation, whereas a higher threshold leads to less accuracy.
 
