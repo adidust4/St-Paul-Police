@@ -1,0 +1,221 @@
+---
+title: "Final Project"
+author: "A'di Dust"
+date: '2021-10-06'
+output:
+  pdf_document: default
+subtitle: Section 2
+---
+
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, message = FALSE)
+# load packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(mosaic)
+library(ggmosaic)
+
+```
+
+
+```{r load-data,  message = FALSE}
+police_stops <- read.csv('mn_saint_paul_2020_04_01.csv')
+```
+
+
+# Cleaning And Variable Manipulation
+
+```{r variable_manipulation,  message = FALSE}
+#transform data
+
+#sum searches
+police_stops <- police_stops %>%
+rowwise() %>%
+mutate(sum_searches = sum(frisk_performed, search_conducted, search_vehicle))
+
+#transform citation
+police_stops <- police_stops %>%
+rowwise() %>%
+mutate(cited = as.numeric(citation_issued))
+```
+
+
+# Question 1
+
+## Exploratory Data Analysis
+
+```{r mod1-data-viz}
+# race versus searches
+
+# Visualization
+
+police_stops %>%
+    ggplot(aes(x = sum_searches, fill = subject_race)) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("#335C67", "#FFF3B0", "#E09F3E", "#E56399", "#540B0E")) + 
+    ggtitle('Proportion of Number of Searches Performed by Subject Race') + 
+        labs(x = 'Number of Searches Performed on Subject', y = 'Proportion', fill = 'Subject Race') + 
+    theme_classic()
+
+# summary
+
+police_stops %>%
+  group_by(sum_searches) %>%
+  count(subject_race) %>%
+  mutate(relfreq = n / sum(n))
+
+# sex versus searches
+
+# Visualization
+
+police_stops %>%
+    ggplot(aes(x = sum_searches, fill = subject_sex)) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("#F4C2C2", "#ADD8E6")) +
+    ggtitle('Proportion of Number of Searches Performed by Subject Sex') + 
+    labs(x = 'Number of Searches Performed on Subject', y = 'Proportion', fill = 'Subject Sex') +
+    theme_classic()
+
+# summary
+
+police_stops %>%
+  group_by(sum_searches) %>%
+  count(subject_sex) %>%
+  mutate(relfreq = n / sum(n))
+```
+
+
+## Model Creation
+
+```{r linear_model_1}
+mod1 <- lm(data=police_stops, sum_searches~subject_race * subject_sex)
+
+mod1
+```
+
+## Model Evaluation
+
+```{r mod1-evaluate}
+confint(mod1)
+
+tidy(mod1)
+```
+
+
+```{r eval-data-viz, message=FALSE}
+# residuals vs sex
+augment(mod1) %>%
+  ggplot(aes(y = .resid, x = subject_sex)) + 
+  geom_boxplot() + 
+  geom_smooth(se = FALSE) +  # add smooth line (without gray uncertainty interval)
+  geom_hline(yintercept = 0) + # add horizontal line at y = 0
+  labs(x = 'Sex', y = 'Residual Number of Searches', title = 'Residuals vs Explanatory Variable') + # update axis labels
+  theme_classic()
+
+# residuals vs race
+augment(mod1) %>%
+  ggplot(aes(y = .resid, x = subject_race)) + 
+  geom_boxplot() + 
+  geom_smooth(se = FALSE) +  # add smooth line (without gray uncertainty interval)
+  geom_hline(yintercept = 0) + # add horizontal line at y = 0
+  labs(x = 'Race', y = 'Residual Number of Searches', title = 'Residuals vs Explanatory Variable') + # update axis labels
+  theme_classic()
+
+#measures of goodness
+glance(mod1)
+```
+
+
+# Question 2
+
+## Exploratory Data Analysis
+
+```{r mod2-data-viz, message=FALSE}
+# frisks performed
+
+# Visualization
+
+police_stops %>%
+    ggplot() +
+    geom_mosaic(aes(x = product(citation_issued, frisk_performed), fill = citation_issued)) +
+    ggtitle('Citations Issued by Whether a Frisk was Performed') + 
+    labs(y = 'Citation Issued', x = 'Frisk Performed on Subject', fill = 'Citation Was Issued') +
+    theme_classic()
+
+# summary
+
+police_stops %>%
+  group_by(frisk_performed) %>%
+  count(citation_issued) %>%
+  mutate(relfreq = n / sum(n))
+
+# searches conducted
+
+# Visualization
+
+police_stops %>%
+    ggplot() +
+    geom_mosaic(aes(x = product(citation_issued, search_conducted), fill = citation_issued)) +
+    ggtitle('Citations Issued by Whether a Search Was Conducted') + 
+    labs(y = 'Citation Issued', x = 'Search Conducted on Subject', fill = 'Citation Was Issued') +
+    theme_classic()
+
+# summary
+
+police_stops %>%
+  group_by(search_conducted) %>%
+  count(citation_issued) %>%
+  mutate(relfreq = n / sum(n))
+
+```
+
+
+## Model Creation
+
+```{r logistic_model}
+# fit model 2
+mod2 <- glm(data=police_stops, family='binomial', citation_issued~frisk_performed+search_conducted)
+
+coef(mod2) %>%
+  exp()
+```
+
+## Fitted Model
+
+
+```{r evaluate_logistic_model}
+confint(mod2)%>% 
+  exp()
+
+tidy(mod2)
+```
+
+```{r mod2-eval-data-viz, message=FALSE}
+# Visualization
+
+threshold <- 0.131
+
+# predicted probability stacked relative frequency barchart
+mod2 %>%
+  augment(type.predict = 'response') %>%
+  ggplot(aes(fill=factor(.fitted), x = factor(citation_issued))) + 
+  geom_bar(position = "fill") + 
+  ylab('Predicted Probability of Being Cited') + 
+  scale_fill_manual(labels = c("13%", "17%", "18%", "24%"), values = c("#e7e6f7", "black", "#e86a92", "#f9c846"), name="% Predicted") +
+  xlab('Actual Outcome of Citation') + 
+  ggtitle('Predictions from Model') 
+
+# predictions for model
+
+mod2 %>%
+  augment(type.predict = 'response') %>%
+  mutate(predictCitation = .fitted >= threshold) %>% 
+  count(citation_issued, predictCitation)
+```
+
+
+
+
